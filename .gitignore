@@ -1,0 +1,16 @@
+# Virtual environments 
+*env
+
+# Coverage
+.coverage
+htmlcov/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Paquetes Python
+*.egg-info/
+src/*.egg-info/
