@@ -1,31 +1,53 @@
 import csv
 import os
 from datetime import datetime
-
+import logging
 import serial
 
+logger = logging.getLogger(__name__)
 
 class AppCore:
     DEFAULT_PORT = "/dev/serial/by-id/usb-Arduino_LLC__www.arduino.cc__Genuino_Uno_9543231383735151E130-if00"
     DEFAULT_BAUDRATE = 9600
     LOG_DIR = "logs"
 
-    def __init__(self):
+    def __init__(self, port):
+        self.port = port
         self.serial_connection = None
 
         self.current_file = None
         self.current_writer = None
         self.current_date = None
 
+    def _connect_serial(self):
+        while True:
+            try:
+                logging.info(f"Connecting to {self.port}")
+
+                self.serial_connection = serial.Serial(
+                    self.port,
+                    self.DEFAULT_BAUDRATE,
+                    timeout=1,
+                )
+
+                logging.info("Connected")
+
+                # Limpiar basura del buffer inicial
+                self.serial_connection.reset_input_buffer()
+
+                return
+
+            except serial.SerialException as e:
+                logging.error(
+                    f"Failed to connect: {e}. "
+                    "Retrying in 5 seconds..."
+                )
+
+                time.sleep(5)
+
     def setup(self):
         os.makedirs(self.LOG_DIR, exist_ok=True)
-
-        self.serial_connection = serial.Serial(
-            self.DEFAULT_PORT,
-            self.DEFAULT_BAUDRATE,
-            timeout=1,
-        )
-
+        self._connect_serial()
         self._open_log_file()
 
     def _open_log_file(self):
@@ -51,10 +73,10 @@ class AppCore:
                 [
                     "timestamp",
                     "millis",
-                    "temperatura exterior",
-                    "humedad exterior",
-                    "temperatura interior",
                     "humedad interior",
+                    "temperatura interior",
+                    "humedad exterior",
+                    "temperatura exterior",
                 ]
             )
 
@@ -67,7 +89,7 @@ class AppCore:
 
     def _process_line(self, line: str):
         try:
-            millis, temp_ext, hum_ext, temp_int, hum_int = line.split(",")
+            millis, hum_int, temp_int, hum_ext, temp_ext  = line.split(",")
 
             timestamp = datetime.now().strftime(
                 "%Y-%m-%d %H:%M:%S"
@@ -77,26 +99,26 @@ class AppCore:
                 [
                     timestamp,
                     millis,
-                    temp_ext,
-                    hum_ext,
+                    hum_int,
                     temp_int,
-                    hum_int
+                    hum_ext,
+                    temp_ext,
                 ]
             )
 
             self.current_file.flush()
 
-            print(
+            logging.info(
                 f"{timestamp} "
                 f"M={millis} "
-                f"T={temp_ext}°C "
-                f"H={hum_ext}% "
+                f"Hi={hum_int}% "
                 f"Ti={temp_int}°C "
-                f"Hi={hum_int}%"
+                f"H={hum_ext}% "
+                f"T={temp_ext}°C"
             )
 
         except ValueError:
-            print(f"Invalid line: {line}")
+            logging.error(f"Invalid line: {line}")
 
     def run(self) -> int:
         self.setup()
@@ -104,13 +126,26 @@ class AppCore:
         try:
             while True:
                 self._rotate_log_if_needed()
+                
+                try:
 
-                line = (
-                    self.serial_connection
-                    .readline()
-                    .decode(errors="ignore")
-                    .strip()
-                )
+                    line = (
+                        self.serial_connection
+                        .readline()
+                        .decode(errors="ignore")
+                        .strip()
+                    )
+                    
+                except serial.SerialException:
+                    logging.error("Lost serial connection")
+
+                    try:
+                        self.serial_connection.close()
+                    except Exception:
+                        pass
+
+                    self._connect_serial()
+                    continue
 
                 if not line:
                     continue
@@ -118,7 +153,7 @@ class AppCore:
                 self._process_line(line)
 
         except KeyboardInterrupt:
-            print("\nStopping logger...")
+            logging.info("\nStopping logger...")
             return 0
 
         finally:
