@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import logging
 import serial
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ class AppCore:
     def _connect_serial(self):
         while True:
             try:
-                logging.info(f"Connecting to {self.port}")
+                logger.info(f"Connecting to {self.port}")
 
                 self.serial_connection = serial.Serial(
                     self.port,
@@ -30,7 +31,7 @@ class AppCore:
                     timeout=1,
                 )
 
-                logging.info("Connected")
+                logger.info("Connected")
 
                 # Limpiar basura del buffer inicial
                 self.serial_connection.reset_input_buffer()
@@ -38,7 +39,7 @@ class AppCore:
                 return
 
             except serial.SerialException as e:
-                logging.error(
+                logger.error(
                     f"Failed to connect: {e}. "
                     "Retrying in 5 seconds..."
                 )
@@ -108,7 +109,7 @@ class AppCore:
 
             self.current_file.flush()
 
-            logging.info(
+            logger.debug(
                 f"{timestamp} "
                 f"M={millis} "
                 f"Hi={hum_int}% "
@@ -118,7 +119,7 @@ class AppCore:
             )
 
         except ValueError:
-            logging.error(f"Invalid line: {line}")
+            logger.error(f"Invalid line: {line}")
 
     def run(self) -> int:
         self.setup()
@@ -137,7 +138,7 @@ class AppCore:
                     )
                     
                 except serial.SerialException:
-                    logging.error("Lost serial connection")
+                    logger.error("Lost serial connection")
 
                     try:
                         self.serial_connection.close()
@@ -153,7 +154,7 @@ class AppCore:
                 self._process_line(line)
 
         except KeyboardInterrupt:
-            logging.info("\nStopping logger...")
+            logger.info("\nStopping logger...")
             return 0
 
         finally:

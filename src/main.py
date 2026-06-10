@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
 import sys
-from core import AppCore
 import logging
+import os
+
+from core import AppCore
+
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=getattr(logging, log_level),
     format="%(asctime)s %(name)s %(levelname)s %(message)s",
 )
 
