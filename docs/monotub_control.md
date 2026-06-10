@@ -20,8 +20,6 @@ arduino-cli  Version: 1.5.0
 
 → ya quedó bien integrado en el sistema
 
-
-
 ### Detección
 
 arduino-cli board list
@@ -34,4 +32,3 @@ arduino-cli compile --fqbn arduino:avr:uno tu_proyecto
 
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno tu_proyecto
 
-## screen
