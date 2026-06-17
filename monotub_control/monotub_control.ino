@@ -1,58 +1,29 @@
-#include "DHT.h"
+#include "logger.h"
+#include "globals.h"
 
-#define DHTPIN1 2     // Pin digital donde conectamos el sensor exterior
-#define DHTPIN2 3     // Pin digital donde conectamos el sensor interior
-#define DHTTYPE DHT22   // Define si usas el DHT22 o DHT11
+unsigned long last_control = 0;
+unsigned long last_report = 0;
 
-DHT dhtExterior(DHTPIN1, DHTTYPE);
-DHT dhtInterior(DHTPIN2, DHTTYPE);
+constexpr unsigned long UPDATE_INTERVAL = 4000; // Intervalo de actualización de los sensores en milisegundos
+
+DHT22Sensor g_dhtExterior(PIN_DHT_EXTERIOR, UPDATE_INTERVAL);
+DHT22Sensor g_dhtInterior(PIN_DHT_INTERIOR, UPDATE_INTERVAL);
 
 void setup() {
-  Serial.begin(9600);
-  //Serial.println("--- Iniciando Monitoreo de Monotub ---");
-  dhtExterior.begin();
-  dhtInterior.begin();
+  Logger::init(60000); // Inicializamos el logger con un intervalo de 60 segundos
+  g_dhtExterior.begin();
+  g_dhtInterior.begin();
+}
+
+void updateSensors() {
+  g_dhtExterior.update();
+  g_dhtInterior.update();
 }
 
 void loop() {
-  // Esperamos 2 minutos entre mediciones (el DHT22 es lento pero preciso, dos segundos entre mediociones bastan)
-  delay(60000);
-  
-  // Leemos la humedad y temperatura del exterior
-  float humExterior = dhtExterior.readHumidity();
-  float tempExterior = dhtExterior.readTemperature(); // Temperatura en Celsius
 
-  // Leemos la humedad y temperatura del interior
-  float humInterior = dhtInterior.readHumidity();
-  float tempInterior = dhtInterior.readTemperature(); // Temperatura en Celsius
+  updateSensors();
 
-  bool error = false;
+  Logger::log();
 
-  // Validamos que el sensor esté respondiendo correctamente
-
-  if (isnan(humExterior) || isnan(tempExterior)) {
-    Serial.println("Error: No se puede leer el sensor DHT exterior. Revisa las conexiones.");
-    error = true;
-  }
-
-  if (isnan(humInterior) || isnan(tempInterior)) {
-    Serial.println("Error: No se puede leer el sensor DHT interior. Revisa las conexiones.");
-    error = true;
-  }
-
-  if (error)
-    return;
-
-  //manda los datos al serial en formato CSV: millis(), humInterior, tempInterior, humExterior, tempExterior
-  Serial.print(millis());
-  Serial.print(",");
-
-  Serial.print(humInterior);
-  Serial.print(",");
-  Serial.print(tempInterior);
-  Serial.print(",");
-
-  Serial.print(humExterior);
-  Serial.print(",");
-  Serial.println(tempExterior);
 }
