@@ -71,6 +71,43 @@ arduino-cli compile --fqbn arduino:avr:uno tu_proyecto
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno tu_proyecto
 ```
 
+## limpiar cache
+
+A veces Arduino marca problemas que no existen, por ejemlo al haberle cambiado el nombre a un archivo:
+
+```sh
+r2d2@R2D2-3BP:~/github/monotub $ ./scripts/compile_upload_arduino.sh -c
+🔧 Compiling...
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::begin()'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::update()'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::isValid() const'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::getTemperature() const'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DTH22Sensor.cpp.o (symbol from plugin): In function `DHT22Sensor::DHT22Sensor(unsigned char, unsigned long)':
+(.text+0x0): multiple definition of `DHT22Sensor::getHumidity() const'
+/home/r2d2/.cache/arduino/sketches/53F462E2C1ED4620E722DDA6FECF6804/sketch/DHT22Sensor.cpp.o (symbol from plugin):(.text+0x0): first defined here
+collect2: error: ld returned 1 exit status
+```
+
+Para solucionar eso, es necesario limpiar el cache:
+
+```sh
+rm -rf ~/.cache/arduino/sketches/*
+```
+
 ## logging
 
 En la aplicación que corre en la RasPi se decidió usar el módulo logging para generar mensajes que indiquen el estatus de la aplicación y posibles causas de error. Además como la aplicación correrá como un servicio que inicia de forma automática, los mensajes quedan grabados en el buffer que se puede revisar con `journalctl`.

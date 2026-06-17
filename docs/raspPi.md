@@ -1,4 +1,4 @@
-# RasPI 
+# RasPI
 
 ## Desactivar GUI
 
