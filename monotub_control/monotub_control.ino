@@ -8,16 +8,19 @@ constexpr unsigned long UPDATE_INTERVAL = 4000; // Intervalo de actualización d
 
 DHT22Sensor g_dhtExterior(PIN_DHT_EXTERIOR, UPDATE_INTERVAL);
 DHT22Sensor g_dhtInterior(PIN_DHT_INTERIOR, UPDATE_INTERVAL);
+SHT41Sensor g_sht41(UPDATE_INTERVAL);
 
 void setup() {
   Logger::init(60000); // Inicializamos el logger con un intervalo de 60 segundos
   g_dhtExterior.begin();
   g_dhtInterior.begin();
+  g_sht41.begin();
 }
 
 void updateSensors() {
   g_dhtExterior.update();
   g_dhtInterior.update();
+  g_sht41.update();
 }
 
 void loop() {

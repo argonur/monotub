@@ -33,6 +33,11 @@ namespace Logger
             error = true;
         }
 
+        if (g_sht41.isValid() == false) {
+            Serial.println("Error: No se puede leer el sensor SHT41. Revisa las conexiones.");
+            error = true;
+        }
+
         if (error)
             return;
 
@@ -43,6 +48,9 @@ namespace Logger
         // Leemos la humedad y temperatura del interior
         float humInterior = g_dhtInterior.getHumidity();
         float tempInterior = g_dhtInterior.getTemperature(); // Temperatura en Celsius
+        
+        float humSHT41 = g_sht41.getHumidity();
+        float tempSHT41 = g_sht41.getTemperature(); // Temperatura en Celsius
 
         //manda los datos al serial en formato CSV: millis(), humInterior, tempInterior, humExterior, tempExterior
         Serial.print(millis());
@@ -51,6 +59,11 @@ namespace Logger
         Serial.print(humInterior);
         Serial.print(",");
         Serial.print(tempInterior);
+        Serial.print(",");
+
+        Serial.print(humSHT41);
+        Serial.print(",");
+        Serial.print(tempSHT41);
         Serial.print(",");
 
         Serial.print(humExterior);

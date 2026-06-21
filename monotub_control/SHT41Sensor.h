@@ -1,12 +1,12 @@
 #pragma once
 
-#include <DHT.h>
+#include <Adafruit_SHT4x.h>
 #include "humiditySensor.h"
 
-class DHT22Sensor : public HumiditySensor
+class SHT41Sensor : public HumiditySensor
 {
 public:
-    DHT22Sensor(uint8_t pin, uint32_t updateInterval);
+    explicit SHT41Sensor(uint32_t updateInterval);
 
     void begin() override;
     void update() override;
@@ -16,7 +16,7 @@ public:
     float getHumidity() const override;
 
 private:
-    DHT m_dht;
+    Adafruit_SHT4x m_sht;
 
     bool m_valid;
     float m_temperature;

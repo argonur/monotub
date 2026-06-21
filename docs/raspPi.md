@@ -141,3 +141,104 @@ Salir de screen:
 ```sh
 Ctrl + A, luego K
 ```
+
+# Instalación de librerías Arduino desde Raspberry Pi
+
+El proyecto se compila desde una Raspberry Pi utilizando Arduino CLI.
+
+## Ver librerías instaladas
+
+```bash
+arduino-cli lib list
+```
+
+## Buscar una librería
+
+```bash
+arduino-cli lib search DHT
+```
+
+o
+
+```bash
+arduino-cli lib search SHT4
+```
+
+## Instalar una librería
+
+Ejemplo para el sensor DHT22:
+
+```bash
+arduino-cli lib install "DHT sensor library"
+```
+
+La librería instala automáticamente sus dependencias necesarias.
+
+Ejemplo para el sensor SHT41:
+
+```bash
+arduino-cli lib install "Adafruit SHT4x Library"
+```
+
+Esta instalación también descargará las dependencias requeridas, como:
+
+* Adafruit BusIO
+* Adafruit Unified Sensor
+
+## Verificar que una librería quedó instalada
+
+```bash
+arduino-cli lib list | grep Adafruit
+```
+
+o
+
+```bash
+arduino-cli lib list | grep DHT
+```
+
+## Uso en el código
+
+### DHT22
+
+```cpp
+#include <DHT.h>
+```
+
+### SHT41
+
+```cpp
+#include <Adafruit_SHT4x.h>
+```
+
+## Actualizar índices de librerías
+
+Si Arduino CLI no encuentra una librería:
+
+```bash
+arduino-cli lib update-index
+```
+
+## Instalar todas las dependencias de un proyecto nuevo
+
+Cuando se clona el proyecto en otra máquina:
+
+1. Instalar Arduino CLI.
+2. Actualizar el índice:
+
+```bash
+arduino-cli lib update-index
+```
+
+3. Instalar las librerías requeridas:
+
+```bash
+arduino-cli lib install "DHT sensor library"
+arduino-cli lib install "Adafruit SHT4x Library"
+```
+
+4. Compilar normalmente:
+
+```bash
+./scripts/build_upload.sh -c
+```
