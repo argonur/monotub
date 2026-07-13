@@ -76,6 +76,8 @@ class AppCore:
                     "millis",
                     "humedad interior",
                     "temperatura interior",
+                    "humedad SHT41",
+                    "temperatura SHT41",
                     "humedad exterior",
                     "temperatura exterior",
                 ]
@@ -90,7 +92,7 @@ class AppCore:
 
     def _process_line(self, line: str):
         try:
-            millis, hum_int, temp_int, hum_ext, temp_ext  = line.split(",")
+            millis, hum_int, temp_int, hum_sht41, temp_sht41, hum_ext, temp_ext  = line.split(",")
 
             timestamp = datetime.now().strftime(
                 "%Y-%m-%d %H:%M:%S"
@@ -102,6 +104,8 @@ class AppCore:
                     millis,
                     hum_int,
                     temp_int,
+                    hum_sht41,
+                    temp_sht41,
                     hum_ext,
                     temp_ext,
                 ]
@@ -114,6 +118,8 @@ class AppCore:
                 f"M={millis} "
                 f"Hi={hum_int}% "
                 f"Ti={temp_int}°C "
+                f"Hs={hum_sht41}% "
+                f"Ts={temp_sht41}°C "
                 f"H={hum_ext}% "
                 f"T={temp_ext}°C"
             )
