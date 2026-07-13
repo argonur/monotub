@@ -4,7 +4,8 @@ import sys
 import logging
 import os
 
-from core import AppCore
+from monotub.serialReader import SerialReader
+from monotub.app import App
 
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 
@@ -13,14 +14,17 @@ logging.basicConfig(
     format="%(asctime)s %(name)s %(levelname)s %(message)s",
 )
 
+logging.getLogger("opcua").setLevel(logging.WARNING)
+
 def main() -> int:
     port = (
         sys.argv[1] # main.py /dev/ttyACMX para especificar el puerto
         if len(sys.argv) > 1
-        else AppCore.DEFAULT_PORT
+        else SerialReader.DEFAULT_PORT
     )
-    core = AppCore(port)
-    return core.run()
+    
+    app = App(port)
+    return app.run()
 
 
 if __name__ == "__main__":

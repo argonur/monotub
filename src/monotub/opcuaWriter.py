@@ -1,11 +1,12 @@
 import logging
 import time
 from opcua import Client, ua
-from measurement import Measurement
+from monotub.measurement import Measurement
+from monotub.dataSink import DataSink
 
 logger = logging.getLogger(__name__)
 
-class OPCUAWriter:
+class OPCUAWriter(DataSink):
 
     OPC_ENDPOINT = "opc.tcp://192.168.1.99:4840"
 

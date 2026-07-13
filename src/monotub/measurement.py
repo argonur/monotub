@@ -18,7 +18,7 @@ class Measurement:
 
     def to_csv_row(self):
         return [
-            self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            self.timestamp,
             self.millis,
             self.humidity_internal,
             self.temperature_internal,

@@ -1,5 +1,5 @@
 from datetime import datetime
-from measurement import Measurement
+from monotub.measurement import Measurement
 import logging
 import serial
 import time

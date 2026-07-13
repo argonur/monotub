@@ -1,12 +1,13 @@
 import csv
 import os
-from measurement import Measurement
+from monotub.measurement import Measurement
 from datetime import datetime
+from monotub.dataSink import DataSink
 import logging
 
 logger = logging.getLogger(__name__)
 
-class CSVLogger:
+class CSVLogger(DataSink):
 
     LOG_DIR = "logs"
 
