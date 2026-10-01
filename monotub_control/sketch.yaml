@@ -1,0 +1,12 @@
+default_profile: uno_env
+
+profiles:
+  uno_env:
+    fqbn: arduino:avr:uno
+    libraries:
+      - Adafruit SHT4x Library (1.0.5)
+      - Adafruit BusIO (1.17.4)
+      - Sensirion I2C SCD4x (1.1.0)
+      - Sensirion Core (0.7.3)
+      - DHT sensor library (1.4.7)
+      - Adafruit Unified Sensor (1.1.15)

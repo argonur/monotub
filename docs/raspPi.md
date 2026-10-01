@@ -242,3 +242,48 @@ arduino-cli lib install "Adafruit SHT4x Library"
 ```bash
 ./scripts/build_upload.sh -c
 ```
+## Configuración del Entorno y Dependencias (`sketch.yaml`)
+
+Este proyecto utiliza **`sketch.yaml`** para definir de forma declarativa el microcontrolador de destino y las librerías necesarias. Funciona como el manifiesto del proyecto (equivalente a un `pyproject.toml` en Python o `package.json` en Node.js), garantizando reproducibilidad al compilar desde la terminal con `arduino-cli`.
+
+### Estructura del archivo (`sketch.yaml`)
+
+```yaml
+default_profile: uno_env
+
+profiles:
+  uno_env:
+    fqbn: arduino:avr:uno
+    libraries:
+      - Adafruit SHT4x Library
+      - Sensirion I2C SCD4x
+      - DHT sensor library
+```
+
+- `fqbn` **(Fully Qualified Board Name)**: Define la placa de desarrollo (arduino:avr:uno para Arduino UNO).
+
+- `libraries`: Declara únicamente las dependencias directas requeridas por el código. Las dependencias transitivas (como `Sensirion Core` o `Adafruit BusIO`) son resueltas e instaladas automáticamente por el CLI.
+
+### Comandos de uso con `arduino-cli`
+
+1. Instalar todas las dependencias del proyecto:
+
+Descarga e instala automáticamente las librerías declaradas en `sketch.yaml` y sus sub-dependencias:
+
+```bash
+arduino-cli lib install --sketch-path .
+```
+
+2. Compilar el proyecto:
+
+Lee el perfil por defecto (`uno_env`) y compila el código sin necesidad de especificar el FQBN manualmente:
+
+```bash
+arduino-cli compile
+```
+
+3. Cargar el binario al microcontrolador:
+
+```bash
+arduino-cli upload -p /dev/ttyACM0
+```

@@ -7,8 +7,6 @@ PROJECT_DIR="$(cd "$(dirname "$0")/../monotub_control" && pwd)"
 DEFAULT_PORT="/dev/serial/by-id/usb-Arduino_LLC__www.arduino.cc__Genuino_Uno_9543231383735151E130-if00"
 PORT="$DEFAULT_PORT"
 
-FQBN="arduino:avr:uno"
-
 COMPILE_ONLY=false
 
 show_help() {
@@ -69,7 +67,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo "🔧 Compiling..."
-arduino-cli compile --fqbn "$FQBN" "$PROJECT_DIR"
+arduino-cli compile "$PROJECT_DIR"
 
 if [[ "$COMPILE_ONLY" == true ]]; then
     echo "✅ Compile successful"
@@ -79,6 +77,6 @@ fi
 echo "Using port: $PORT"
 
 echo "🚀 Uploading..."
-arduino-cli upload -p "$PORT" --fqbn "$FQBN" "$PROJECT_DIR"
+arduino-cli upload -p "$PORT" "$PROJECT_DIR"
 
 echo "✅ Done"
