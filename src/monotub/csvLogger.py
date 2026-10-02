@@ -17,8 +17,11 @@ class CSVLogger(DataSink):
         "millis",
         "humedad interior",
         "temperatura interior",
-        "humedad SHT41",
-        "temperatura SHT41",
+        #"humedad SHT41",
+        #"temperatura SHT41",
+        "humedad SCD41",
+        "temperatura SCD41",
+        "CO2 SCD41",
         "humedad exterior",
         "temperatura exterior",
     ]

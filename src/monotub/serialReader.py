@@ -49,8 +49,11 @@ class SerialReader:
                 millis,
                 hum_int,
                 temp_int,
-                hum_sht41,
-                temp_sht41,
+                #hum_sht41,
+                #temp_sht41,
+                hum_scd41,
+                temp_scd41,
+                co2_scd41,
                 hum_ext,
                 temp_ext,
             ) = line.split(",")
@@ -62,8 +65,12 @@ class SerialReader:
                 humidity_internal=float(hum_int),
                 temperature_internal=float(temp_int),
 
-                humidity_sht41=float(hum_sht41),
-                temperature_sht41=float(temp_sht41),
+                #humidity_sht41=float(hum_sht41),
+                #temperature_sht41=float(temp_sht41),
+
+                humidity_scd41=float(hum_scd41),
+                temperature_scd41=float(temp_scd41),
+                co2_scd41=float(co2_scd41),
 
                 humidity_external=float(hum_ext),
                 temperature_external=float(temp_ext),
@@ -74,8 +81,11 @@ class SerialReader:
                 f"M={measurement.millis} "
                 f"Hi={measurement.humidity_internal:.1f}% "
                 f"Ti={measurement.temperature_internal:.1f}°C "
-                f"Hs={measurement.humidity_sht41:.1f}% "
-                f"Ts={measurement.temperature_sht41:.1f}°C "
+                #f"Hs={measurement.humidity_sht41:.1f}% "
+                #f"Ts={measurement.temperature_sht41:.1f}°C "
+                f"Hs={measurement.humidity_scd41:.1f}% "
+                f"Ts={measurement.temperature_scd41:.1f}°C "
+                f"CO2={measurement.co2_scd41:.1f}ppm "
                 f"He={measurement.humidity_external:.1f}% "
                 f"Te={measurement.temperature_external:.1f}°C"
             )

@@ -11,8 +11,11 @@ class OPCUAWriter(DataSink):
     OPC_ENDPOINT = "opc.tcp://192.168.1.99:4840"
 
     NODES = {
-        "humidity_sht41": "ns=4;i=46",
-        "temperature_sht41": "ns=4;i=47",
+        #"humidity_sht41": "ns=4;i=46",
+        #"temperature_sht41": "ns=4;i=47",
+        "humidity_scd41": "ns=4;i=73",
+        "temperature_scd41": "ns=4;i=84",
+        "co2_scd41": "ns=4;i=95",        
         "humidity_external": "ns=4;i=48",
         "temperature_external": "ns=4;i=49",
     }

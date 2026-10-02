@@ -33,8 +33,13 @@ namespace Logger
             error = true;
         }
 
-        if (g_sht41.isValid() == false) {
+        /*if (g_sht41.isValid() == false) {
             Serial.println("Error: No se puede leer el sensor SHT41. Revisa las conexiones.");
+            error = true;
+        }*/
+
+        if (g_scd41.isValid() == false) {
+            Serial.println("Error: No se puede leer el sensor SCD41. Revisa las conexiones.");
             error = true;
         }
 
@@ -49,8 +54,16 @@ namespace Logger
         float humInterior = g_dhtInterior.getHumidity();
         float tempInterior = g_dhtInterior.getTemperature(); // Temperatura en Celsius
         
+        /*
+        // Leemos la humedad y temperatura del SHT41
         float humSHT41 = g_sht41.getHumidity();
         float tempSHT41 = g_sht41.getTemperature(); // Temperatura en Celsius
+        */
+        
+        // Leemos la humedad y temperatura del SCD41
+        float humSCD41 = g_scd41.getHumidity();
+        float tempSCD41 = g_scd41.getTemperature(); // Temperatura en Celsius
+        float co2SCD41 = g_scd41.getCO2(); // Concentración de CO2 en ppm
 
         //manda los datos al serial en formato CSV: millis(), humInterior, tempInterior, humExterior, tempExterior
         Serial.print(millis());
@@ -61,9 +74,18 @@ namespace Logger
         Serial.print(tempInterior);
         Serial.print(",");
 
+        /*
         Serial.print(humSHT41);
         Serial.print(",");
         Serial.print(tempSHT41);
+        Serial.print(",");
+        */
+        
+        Serial.print(humSCD41);
+        Serial.print(",");
+        Serial.print(tempSCD41);
+        Serial.print(",");
+        Serial.print(co2SCD41);
         Serial.print(",");
 
         Serial.print(humExterior);

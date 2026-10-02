@@ -10,8 +10,12 @@ class Measurement:
     humidity_internal: float
     temperature_internal: float
 
-    humidity_sht41: float
-    temperature_sht41: float
+    #humidity_sht41: float
+    #temperature_sht41: float
+
+    humidity_scd41: float
+    temperature_scd41: float
+    co2_scd41: float
 
     humidity_external: float
     temperature_external: float
@@ -22,8 +26,11 @@ class Measurement:
             self.millis,
             self.humidity_internal,
             self.temperature_internal,
-            self.humidity_sht41,
-            self.temperature_sht41,
+            #self.humidity_sht41,
+            #self.temperature_sht41,
+            self.humidity_scd41,
+            self.temperature_scd41,
+            self.co2_scd41,
             self.humidity_external,
             self.temperature_external,
         ]
